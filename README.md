@@ -19,9 +19,12 @@ CarbonWise turns everyday activities (driving, electricity, food, shopping, wast
 | **Gamification** | XP, levels, daily streaks, and 8 unlockable badges |
 | **Leaderboard** | Users ranked by carbon score & XP |
 | **Tree Offset** | Trees needed to offset your annual emissions |
-| **Reports** | Print-to-PDF report + CSV export |
+| **Reports** | Print-to-PDF report with embedded **QR code** + CSV export |
+| **Notifications** | Smart alerts: weekly-target exceeded, day-over-day spikes, streaks, badge unlocks |
 | **Eco Map** | Leaflet + OpenStreetMap showing nearby recycling, EV charging, transit & green spaces |
-| **UX** | Dark/Light mode, responsive, WCAG-minded (skip link, ARIA, focus rings, reduced-motion), PWA manifest |
+| **AI Coach voice input** | Ask the coach hands-free via the Web Speech API |
+| **PWA / offline** | Installable, service-worker app-shell caching for offline use |
+| **UX** | Dark/Light mode, responsive, WCAG-minded (skip link, ARIA live regions, `aria-invalid`, focus rings, reduced-motion) |
 
 ---
 
@@ -70,10 +73,17 @@ npm run dev                 # http://localhost:3000
 ```bash
 npm run build      # prisma generate + production build
 npm start          # run production build
-npm test           # unit tests (Vitest)
+npm test           # unit tests (Vitest) — 66 tests across 8 suites
+npm run lint       # full TypeScript type-check (tsc --noEmit)
 npm run db:studio  # open Prisma Studio
 npm run db:seed    # reseed demo data
 ```
+
+### Performance & quality
+
+- **Code-split charts** — Recharts is lazy-loaded per chart with skeleton fallbacks, keeping the initial bundle small.
+- **Route-level streaming** — shared `loading.tsx` skeleton for instant navigation feedback.
+- **Strict CSP + HSTS** and a clean dependency tree; `tsc --noEmit` and 66 unit tests run green.
 
 ---
 

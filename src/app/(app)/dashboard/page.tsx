@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardHeader, ProgressBar, Badge } from "@/components/ui";
 import { PageHeader, Spinner } from "@/components/page-header";
-import { CategoryPie, TrendLine, WeeklyBars } from "@/components/charts";
+import { CategoryPie, TrendLine, WeeklyBars } from "@/components/lazy-charts";
 import { api } from "@/lib/client";
 import type { StatsPayload } from "@/lib/types";
 import { formatKg } from "@/lib/utils";

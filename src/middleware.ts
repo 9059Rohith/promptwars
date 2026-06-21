@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { verifyToken } from "@/lib/auth";
 
-const PROTECTED = ["/dashboard", "/calculator", "/activities", "/analytics", "/goals", "/achievements", "/coach", "/leaderboard", "/report", "/map", "/profile"];
+const PROTECTED = ["/dashboard", "/calculator", "/activities", "/analytics", "/goals", "/achievements", "/coach", "/notifications", "/leaderboard", "/report", "/map", "/profile"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

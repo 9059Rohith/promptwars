@@ -9,7 +9,7 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle?: stri
 
 export function Spinner() {
   return (
-    <div className="flex items-center justify-center py-20" role="status" aria-label="Loading">
+    <div className="flex items-center justify-center py-20" role="status" aria-busy="true" aria-label="Loading">
       <span className="h-8 w-8 animate-spin rounded-full border-3 border-primary border-t-transparent" />
     </div>
   );

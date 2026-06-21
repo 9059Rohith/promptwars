@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, CardHeader } from "@/components/ui";
 import { PageHeader, Spinner } from "@/components/page-header";
-import { CategoryPie, WeeklyBars } from "@/components/charts";
+import { CategoryPie, WeeklyBars } from "@/components/lazy-charts";
 import { api } from "@/lib/client";
 import type { StatsPayload, ActivityDTO } from "@/lib/types";
 import { CATEGORY_META } from "@/lib/emissions";
@@ -13,10 +13,14 @@ import { Download, Printer } from "lucide-react";
 export default function ReportPage() {
   const [stats, setStats] = useState<StatsPayload | null>(null);
   const [acts, setActs] = useState<ActivityDTO[]>([]);
+  const [qr, setQr] = useState<string>("");
 
   useEffect(() => {
     api.get<StatsPayload>("/stats").then(setStats);
     api.get<ActivityDTO[]>("/activities").then(setActs);
+    import("qrcode").then((QR) =>
+      QR.toDataURL(window.location.origin, { width: 96, margin: 1 }).then(setQr).catch(() => {}),
+    );
   }, []);
 
   function exportCsv() {
@@ -53,9 +57,15 @@ export default function ReportPage() {
               <h2 className="text-2xl font-bold">🌍 CarbonWise Report</h2>
               <p className="text-sm text-muted-foreground">Generated {todayISO()}</p>
             </div>
-            <div className="text-right">
-              <p className="text-3xl font-extrabold" style={{ color: band.color }}>{stats.score}/100</p>
-              <p className="text-sm">{band.emoji} {band.label}</p>
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-3xl font-extrabold" style={{ color: band.color }}>{stats.score}/100</p>
+                <p className="text-sm">{band.emoji} {band.label}</p>
+              </div>
+              {qr && (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={qr} alt="QR code linking to CarbonWise" width={72} height={72} className="rounded-lg border border-border" />
+              )}
             </div>
           </div>
 

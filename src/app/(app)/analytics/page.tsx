@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardHeader, ProgressBar } from "@/components/ui";
 import { PageHeader, Spinner } from "@/components/page-header";
-import { CategoryPie, TrendLine, WeeklyBars } from "@/components/charts";
+import { CategoryPie, TrendLine, WeeklyBars } from "@/components/lazy-charts";
 import { api } from "@/lib/client";
 import type { StatsPayload } from "@/lib/types";
 import { CATEGORY_META } from "@/lib/emissions";

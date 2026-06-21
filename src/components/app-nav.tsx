@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   LayoutDashboard, Calculator, ListChecks, BarChart3, Target,
-  Trophy, Bot, Award, FileText, Map as MapIcon, Leaf, LogOut, Menu, X,
+  Trophy, Bot, Award, FileText, Map as MapIcon, Leaf, LogOut, Menu, X, Bell,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -19,6 +19,7 @@ const links = [
   { href: "/goals", label: "Goals", icon: Target },
   { href: "/achievements", label: "Achievements", icon: Award },
   { href: "/coach", label: "AI Coach", icon: Bot },
+  { href: "/notifications", label: "Notifications", icon: Bell },
   { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { href: "/report", label: "Report", icon: FileText },
   { href: "/map", label: "Eco Map", icon: MapIcon },

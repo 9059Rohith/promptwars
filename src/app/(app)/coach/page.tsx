@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Card, CardHeader, Input, Badge } from "@/components/ui";
 import { PageHeader } from "@/components/page-header";
 import { api } from "@/lib/client";
 import type { CoachResponse } from "@/lib/types";
-import { Bot, Sparkles } from "lucide-react";
+import { Bot, Sparkles, Mic, MicOff } from "lucide-react";
 
 const PRESETS = [
   "How can I reduce my emissions?",
@@ -18,6 +18,42 @@ export default function CoachPage() {
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CoachResponse | null>(null);
+  const [listening, setListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+  const recognitionRef = useRef<{ start: () => void; stop: () => void } | null>(null);
+
+  useEffect(() => {
+    const w = window as unknown as {
+      SpeechRecognition?: new () => any;
+      webkitSpeechRecognition?: new () => any;
+    };
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!SR) return;
+    setVoiceSupported(true);
+    const rec = new SR();
+    rec.lang = "en-US";
+    rec.interimResults = false;
+    rec.onresult = (e: any) => {
+      const text = e.results[0][0].transcript as string;
+      setQuestion(text);
+      setListening(false);
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    recognitionRef.current = rec;
+  }, []);
+
+  function toggleVoice() {
+    const rec = recognitionRef.current;
+    if (!rec) return;
+    if (listening) {
+      rec.stop();
+      setListening(false);
+    } else {
+      setListening(true);
+      rec.start();
+    }
+  }
 
   async function ask(q?: string) {
     const query = q ?? question;
@@ -51,6 +87,17 @@ export default function CoachPage() {
           className="mt-4 flex gap-2"
         >
           <Input value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Ask the coach anything about your footprint…" />
+          {voiceSupported && (
+            <Button
+              type="button"
+              variant={listening ? "danger" : "outline"}
+              onClick={toggleVoice}
+              aria-label={listening ? "Stop voice input" : "Start voice input"}
+              aria-pressed={listening}
+            >
+              {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+            </Button>
+          )}
           <Button type="submit" loading={loading}>
             <Sparkles className="h-4 w-4" /> Ask
           </Button>

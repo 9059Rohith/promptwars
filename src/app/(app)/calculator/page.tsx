@@ -120,6 +120,7 @@ export default function CalculatorPage() {
           {toast && (
             <p
               role="status"
+              aria-live="polite"
               className={`mt-4 rounded-lg px-3 py-2 text-sm ${
                 toast.ok ? "bg-primary/10 text-primary" : "bg-red-500/10 text-red-500"
               }`}

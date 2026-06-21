@@ -90,19 +90,19 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
             />
           </div>
 
-          {error && (
-            <p role="alert" className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-500">
-              {error}
-            </p>
-          )}
+          <p id="form-error" role="alert" aria-live="assertive" className="min-h-0">
+            {error && (
+              <span className="block rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-500">{error}</span>
+            )}
+          </p>
 
-          <Button type="submit" size="lg" className="w-full" loading={loading}>
+          <Button type="submit" size="lg" className="w-full" loading={loading} aria-describedby={error ? "form-error" : undefined}>
             {isSignup ? "Create account" : "Log in"}
           </Button>
         </form>
 
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+          <span className="h-px flex-1 bg-border" /> <span>or</span> <span className="h-px flex-1 bg-border" />
         </div>
 
         <Button variant="outline" size="lg" className="w-full" loading={demoLoading} onClick={tryDemo}>
