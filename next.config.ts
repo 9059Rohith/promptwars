@@ -30,6 +30,12 @@ const nextConfig: NextConfig = {
             value: "max-age=63072000; includeSubDomains; preload",
           },
           { key: "X-DNS-Prefetch-Control", value: "off" },
+          // COOP isolates our browsing context; CORP limits who can embed our
+          // resources. COEP is intentionally omitted so cross-origin OSM map
+          // tiles continue to load.
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
+          { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(self), geolocation=(self), interest-cohort=()",

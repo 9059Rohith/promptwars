@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { AuthError } from "./auth";
+import { logger } from "./logger";
 
 export function ok<T>(data: T, status = 200) {
   return NextResponse.json({ data }, { status });
@@ -16,7 +17,7 @@ export function handleError(err: unknown) {
   if (err instanceof ZodError) {
     return fail("Validation failed", 422, err.flatten().fieldErrors);
   }
-  console.error("[api] unhandled error", err);
+  logger.error("Unhandled API error", { error: err instanceof Error ? err.message : String(err) });
   return fail("Internal server error", 500);
 }
 

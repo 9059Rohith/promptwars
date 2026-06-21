@@ -17,7 +17,11 @@ const tooltipStyle = {
 export function CategoryPie({ data }: { data: { category: Category; kg: number }[] }) {
   const filtered = data.filter((d) => d.kg > 0);
   if (!filtered.length) return <EmptyChart label="No emissions logged yet" />;
+  const summary =
+    "Emissions by category: " +
+    filtered.map((d) => `${CATEGORY_META[d.category].label} ${d.kg} kg`).join(", ");
   return (
+    <div role="img" aria-label={summary}>
     <ResponsiveContainer width="100%" height={260}>
       <PieChart>
         <Pie data={filtered} dataKey="kg" nameKey="category" innerRadius={55} outerRadius={90} paddingAngle={2}>
@@ -32,11 +36,15 @@ export function CategoryPie({ data }: { data: { category: Category; kg: number }
         <Legend formatter={(v: string) => CATEGORY_META[v as Category]?.label ?? v} />
       </PieChart>
     </ResponsiveContainer>
+    </div>
   );
 }
 
 export function TrendLine({ data }: { data: { date: string; kg: number }[] }) {
+  const total = data.reduce((s, d) => s + d.kg, 0);
+  const label = `Daily emissions trend over ${data.length} days, totalling ${Math.round(total)} kg CO2e`;
   return (
+    <div role="img" aria-label={label}>
     <ResponsiveContainer width="100%" height={260}>
       <LineChart data={data} margin={{ left: -16, right: 8, top: 8 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -46,11 +54,14 @@ export function TrendLine({ data }: { data: { date: string; kg: number }[] }) {
         <Line type="monotone" dataKey="kg" stroke="var(--primary)" strokeWidth={2.5} dot={false} />
       </LineChart>
     </ResponsiveContainer>
+    </div>
   );
 }
 
 export function WeeklyBars({ data }: { data: { week: string; kg: number }[] }) {
+  const label = "Weekly emissions: " + data.map((d) => `${d.week} ${d.kg} kg`).join(", ");
   return (
+    <div role="img" aria-label={label}>
     <ResponsiveContainer width="100%" height={260}>
       <BarChart data={data} margin={{ left: -16, right: 8, top: 8 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
@@ -60,6 +71,7 @@ export function WeeklyBars({ data }: { data: { week: string; kg: number }[] }) {
         <Bar dataKey="kg" fill="var(--primary)" radius={[6, 6, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
+    </div>
   );
 }
 

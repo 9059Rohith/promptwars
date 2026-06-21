@@ -73,17 +73,21 @@ npm run dev                 # http://localhost:3000
 ```bash
 npm run build      # prisma generate + production build
 npm start          # run production build
-npm test           # unit tests (Vitest) — 66 tests across 8 suites
-npm run lint       # full TypeScript type-check (tsc --noEmit)
+npm test           # unit tests (Vitest) — 73 tests across 9 suites
+npm run lint       # ESLint (flat config, typescript-eslint + react-hooks)
+npm run typecheck  # tsc --noEmit
+npm run verify     # lint + typecheck + tests in one go
 npm run db:studio  # open Prisma Studio
-npm run db:seed    # reseed demo data
 ```
 
 ### Performance & quality
 
 - **Code-split charts** — Recharts is lazy-loaded per chart with skeleton fallbacks, keeping the initial bundle small.
 - **Route-level streaming** — shared `loading.tsx` skeleton for instant navigation feedback.
-- **Strict CSP + HSTS** and a clean dependency tree; `tsc --noEmit` and 66 unit tests run green.
+- **ML forecast** — least-squares linear regression projects your next 30 days (`src/lib/prediction.ts`).
+- **Structured logging** — JSON logs in prod via `src/lib/logger.ts`.
+- **Security** — strict CSP, HSTS, COOP/CORP, cross-domain policy headers.
+- **CI** — GitHub Actions runs lint + type-check + tests + build on every push; ESLint, `tsc`, and 73 unit tests all green. See [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ---
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardHeader, Badge, ProgressBar } from "@/components/ui";
+import { Card, ProgressBar } from "@/components/ui";
 import { PageHeader, Spinner } from "@/components/page-header";
 import { api } from "@/lib/client";
 import type { Level } from "@/lib/scoring";

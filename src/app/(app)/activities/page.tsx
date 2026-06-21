@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card, Button, Badge } from "@/components/ui";
+import { Card, Badge } from "@/components/ui";
 import { PageHeader, Spinner } from "@/components/page-header";
 import { api } from "@/lib/client";
 import type { ActivityDTO } from "@/lib/types";

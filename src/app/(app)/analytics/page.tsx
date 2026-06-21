@@ -8,6 +8,8 @@ import { api } from "@/lib/client";
 import type { StatsPayload } from "@/lib/types";
 import { CATEGORY_META } from "@/lib/emissions";
 import { formatKg } from "@/lib/utils";
+import { forecast } from "@/lib/prediction";
+import { TrendingDown, TrendingUp, Minus } from "lucide-react";
 
 export default function AnalyticsPage() {
   const [stats, setStats] = useState<StatsPayload | null>(null);
@@ -16,6 +18,9 @@ export default function AnalyticsPage() {
   }, []);
   if (!stats) return <Spinner />;
   const { analytics: a } = stats;
+  const fc = forecast(a.dailySeries, 7);
+  const TrendIcon = fc.trend === "rising" ? TrendingUp : fc.trend === "falling" ? TrendingDown : Minus;
+  const trendColor = fc.trend === "rising" ? "text-red-500" : fc.trend === "falling" ? "text-primary" : "text-muted-foreground";
 
   return (
     <div>
@@ -34,6 +39,33 @@ export default function AnalyticsPage() {
           </Card>
         ))}
       </div>
+
+      <Card className="mb-4 p-5">
+        <CardHeader title="🔮 Carbon Forecast" subtitle="ML linear-regression projection from your recent trend" />
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-lg bg-muted/50 p-4">
+            <p className="text-xs text-muted-foreground">Trend</p>
+            <p className={`mt-1 flex items-center gap-1.5 text-lg font-bold capitalize ${trendColor}`}>
+              <TrendIcon className="h-5 w-5" /> {fc.trend}
+            </p>
+          </div>
+          <div className="rounded-lg bg-muted/50 p-4">
+            <p className="text-xs text-muted-foreground">Projected next 30 days</p>
+            <p className="mt-1 text-lg font-bold">{formatKg(fc.projectedMonthlyKg)}</p>
+          </div>
+          <div className="rounded-lg bg-muted/50 p-4">
+            <p className="text-xs text-muted-foreground">Model fit (R²)</p>
+            <p className="mt-1 text-lg font-bold">{fc.r2}</p>
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          {fc.trend === "rising"
+            ? "Your emissions are trending up — check the AI Coach for ways to reverse it."
+            : fc.trend === "falling"
+              ? "Great work — your emissions are trending down. Keep it up!"
+              : "Your emissions are holding steady."}
+        </p>
+      </Card>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card>

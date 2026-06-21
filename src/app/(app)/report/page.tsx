@@ -63,7 +63,6 @@ export default function ReportPage() {
                 <p className="text-sm">{band.emoji} {band.label}</p>
               </div>
               {qr && (
-                /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={qr} alt="QR code linking to CarbonWise" width={72} height={72} className="rounded-lg border border-border" />
               )}
             </div>

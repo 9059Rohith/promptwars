@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, Card, CardHeader, Input, Badge } from "@/components/ui";
+import { Button, Card, Input, Badge } from "@/components/ui";
 import { PageHeader } from "@/components/page-header";
 import { api } from "@/lib/client";
 import type { CoachResponse } from "@/lib/types";
+import { getSpeechRecognition, type SpeechRecognitionLike } from "@/lib/speech";
 import { Bot, Sparkles, Mic, MicOff } from "lucide-react";
 
 const PRESETS = [
@@ -20,22 +21,17 @@ export default function CoachPage() {
   const [result, setResult] = useState<CoachResponse | null>(null);
   const [listening, setListening] = useState(false);
   const [voiceSupported, setVoiceSupported] = useState(false);
-  const recognitionRef = useRef<{ start: () => void; stop: () => void } | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
   useEffect(() => {
-    const w = window as unknown as {
-      SpeechRecognition?: new () => any;
-      webkitSpeechRecognition?: new () => any;
-    };
-    const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
+    const SR = getSpeechRecognition();
     if (!SR) return;
     setVoiceSupported(true);
     const rec = new SR();
     rec.lang = "en-US";
     rec.interimResults = false;
-    rec.onresult = (e: any) => {
-      const text = e.results[0][0].transcript as string;
-      setQuestion(text);
+    rec.onresult = (e) => {
+      setQuestion(e.results[0][0].transcript);
       setListening(false);
     };
     rec.onend = () => setListening(false);
