@@ -2,6 +2,8 @@
 
 > Measure, understand, and reduce your everyday CO₂ emissions. A personal carbon tracker — like a fitness tracker, but for the planet.
 
+**🔗 Live demo: [promptwars-yicj.vercel.app](https://promptwars-yicj.vercel.app/)** — click **"Explore the live demo"** for a one-click, pre-populated account (no sign-up).
+
 CarbonWise turns everyday activities (driving, electricity, food, shopping, waste) into actionable **CO₂e** insights, then coaches you toward a greener lifestyle with analytics, goals, gamification, and an AI sustainability coach.
 
 ---
