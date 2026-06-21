@@ -1,0 +1,66 @@
+// CarbonWise data model — MongoDB (Atlas) for serverless-friendly persistence.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  name         String
+  passwordHash String
+  // Gamification
+  xp           Int      @default(0)
+  streak       Int      @default(0)
+  lastLogDate  String? // YYYY-MM-DD of last activity, for streak math
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  activities   Activity[]
+  goals        Goal[]
+  achievements Achievement[]
+}
+
+// A single logged emission entry (one category at a time).
+model Activity {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category  String // transport | electricity | food | shopping | waste
+  subtype   String // car, bus, electricity, non-veg, plastic, etc.
+  amount    Float // km, kWh, meals, kg, items
+  unit      String
+  co2       Float // computed kg CO2e
+  note      String?
+  date      String // YYYY-MM-DD
+  createdAt DateTime @default(now())
+
+  @@index([userId, date])
+}
+
+model Goal {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  targetPct  Int // reduce by X percent
+  baselineKg Float // monthly baseline at creation
+  periodDays Int      @default(30)
+  startDate  String
+  achieved   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Achievement {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code       String // matches a definition in lib/achievements
+  unlockedAt DateTime @default(now())
+
+  @@unique([userId, code])
+}
