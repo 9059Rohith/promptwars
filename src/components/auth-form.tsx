@@ -12,8 +12,22 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
   const params = useSearchParams();
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isSignup = mode === "signup";
+
+  async function tryDemo() {
+    setError(null);
+    setDemoLoading(true);
+    try {
+      await api.post("/auth/demo");
+      router.push("/dashboard");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Could not start demo");
+      setDemoLoading(false);
+    }
+  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -86,6 +100,17 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
             {isSignup ? "Create account" : "Log in"}
           </Button>
         </form>
+
+        <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+        </div>
+
+        <Button variant="outline" size="lg" className="w-full" loading={demoLoading} onClick={tryDemo}>
+          🌱 Explore the live demo
+        </Button>
+        <p className="mt-2 text-center text-xs text-muted-foreground">
+          One click — no sign-up. Loads a pre-populated account.
+        </p>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           {isSignup ? "Already have an account? " : "New to CarbonWise? "}

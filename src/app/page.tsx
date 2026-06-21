@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { DemoButton } from "@/components/demo-button";
 import { Leaf, BarChart3, Bot, Target, Trophy, TreePine } from "lucide-react";
 
 const features = [
@@ -53,12 +54,7 @@ export default function Home() {
             >
               Start tracking free
             </Link>
-            <Link
-              href="/login"
-              className="rounded-lg border border-border bg-card px-6 py-3 font-medium hover:bg-muted"
-            >
-              I have an account
-            </Link>
+            <DemoButton />
           </div>
         </section>
 
